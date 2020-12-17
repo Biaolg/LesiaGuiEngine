@@ -1,46 +1,59 @@
 class LesiaGuiEngine {
   constructor(
-    canObj = {
-      type: "2d",
-      size: {
-        w: 1920,
-        h: 1080,
-      },
-      target: document.querySelector("body"),
-      element: {
-        renderText: {
-          helloword: {
-            content: "Hello world!",
-            color: "red",
-            pos: {
-              x: 1920 / 2,
-              y: 1080 / 2,
-            },
-          },
-        },
-      },
-    }
+    canObj
   ) {
-    this.data = { cnaObj };
-    this.ctx = cnaObj.target.getContext(cnaObj.type);
+    this.data = canObj;
+    this.canvas = document.createElement("canvas");
+    this.canvas.width = this.data.size.w;
+    this.canvas.height = this.data.size.h;
+    this.ctx = this.canvas.getContext(canObj.type);
+    this.data.target.appendChild(this.canvas);
+    this.Rendering();//首次渲染
   }
   getCtx() {
-    let ret = this.data;
-    ret.set = (value) => {
-      ret = value;
-      this.Rendering(ret);
-    };
-    return this.data;
+    let slef = this;
+    let element = JSON.parse(JSON.stringify(slef.data.element));
+    let rongq = {};
+
+    Object.keys(element).forEach(key => {
+      if (key != "defaultStyle") {
+        let obj = element[key];
+        Object.keys(obj).forEach(item => {
+          rongq[key] = new Proxy(obj[item], {
+            get: function (target, propKey, receiver) {
+              return Reflect.get(target, propKey, receiver);
+            },
+            set: function (target, propKey, value, receiver) {
+              baogao([key,item,propKey],value);
+              console.log(propKey);
+              return Reflect.set(target, propKey, value, receiver);
+            }
+          })
+        })
+      }
+    });
+
+    function baogao(arrkey, value) {
+      let [key1,key2,key3] = arrkey;
+      console.log(arrkey)
+      slef.data.element[key1][key2][key3] = value;
+      slef.Rendering();
+    }
+
+    return element;
   }
-  Rendering(obj = this.data) {
-    for (const Key in obj.element) {
-      let element = obj.element[Key];
+  Rendering(obj = this.data.element) {
+    for (const Key in obj) {
+      let element = obj[Key];
       if (this[Key] !== undefined) {
         for (const key in element) {
           this[Key](element[key]);
         }
       }
     }
+
   }
-  renderText() {}
+  renderText(obj) {
+    console.log(obj);
+  }
 }
