@@ -8,10 +8,10 @@ class LesiaGuiEngine {
       },
       target: document.querySelector("body"),
       element: {
-        text: {
+        renderText: {
           helloword: {
             content: "Hello world!",
-            color:"red",
+            color: "red",
             pos: {
               x: 1920 / 2,
               y: 1080 / 2,
@@ -22,18 +22,25 @@ class LesiaGuiEngine {
     }
   ) {
     this.data = { cnaObj };
+    this.ctx = cnaObj.target.getContext(cnaObj.type);
   }
   getCtx() {
+    let ret = this.data;
+    ret.set = (value) => {
+      ret = value;
+      this.Rendering(ret);
+    };
     return this.data;
   }
-  Rendering() {
-    for (const key in this.data.element) {
-      switch (key) {
-        case "text":
-          this.RenderingText();
-          break;
+  Rendering(obj = this.data) {
+    for (const Key in obj.element) {
+      let element = obj.element[Key];
+      if (this[Key] !== undefined) {
+        for (const key in element) {
+          this[Key](element[key]);
+        }
       }
     }
   }
-  RenderingText()
+  renderText() {}
 }
