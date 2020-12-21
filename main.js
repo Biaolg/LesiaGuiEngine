@@ -2,7 +2,7 @@ window.onload = function () {
 
     this.$ = id => document.querySelector(id);
     let box = $(".box");
-    console.log(box)
+
     let canObj = {
         type: "2d",
         size: {
@@ -17,8 +17,10 @@ window.onload = function () {
             },
             renderText: {
                 helloword: {
+                    style:{
+                        color: "red",
+                    },
                     content: "Hello world!",
-                    color: "red",
                     x: 0,
                     y: 0
                 },
@@ -27,7 +29,8 @@ window.onload = function () {
     }
 
     let lesiaUi = new LesiaGuiEngine(canObj);
-    let ctx = lesiaUi.getCtx();
-    console.log(ctx);
-    ctx.renderText.helloword.content = "001";
+
+    lesiaUi.Animation(function(element){
+        
+    })
 }
