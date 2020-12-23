@@ -6,6 +6,7 @@ class LesiaGuiEngine {
     this.canvas.height = this.data.size.h;
     this.ctx = this.canvas.getContext(canObj.type);
     this.data.target.appendChild(this.canvas);
+    this.defaultStyle = {};
     this.Rendering(); //首次渲染
   }
   getDynamic() {
@@ -47,6 +48,7 @@ class LesiaGuiEngine {
     let b = fn(this.data.element);
     if (!b) {
       setTimeout(() => {
+        this.ctx.clearRect(0, 0, this.data.size.w, this.data.size.h);
         this.Animation(fn);
         this.Rendering();
       }, 1000 / 60);
@@ -62,12 +64,33 @@ class LesiaGuiEngine {
       }
     }
   }
-  renderText(obj) {
-    let { style, content, x, y } = obj;
-    if (style) {
-      Object.keys(style).forEach((key) => {
-        this.ctx[key] = style[key];
-      });
-    }
+  renderStyle(style, fn) {
+    let temporary = {};
+    this.ctx.beginPath();
+    Object.keys(style).forEach((key) => {
+      temporary[key] = this.ctx[key];
+      this.ctx[key] = style[key];
+    });
+    fn();
+    Object.keys(temporary).forEach((key) => {
+      this.ctx[key] = temporary[key];
+    });
   }
+  renderText(obj) {
+    let { style, content, x, y, type } = obj;
+    this.renderStyle(style, () => {
+      this.ctx[type](content, x, y);
+    });
+  }
+  renderRect(obj) {
+    let { style, x, y, w, h, type } = obj;
+    this.renderStyle(style, () => {
+      this.ctx.rect(x, y, w, h);
+      this.ctx[type]();
+    });
+  }
+  renderImg(obj){
+
+  }
+  render
 }
