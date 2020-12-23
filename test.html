@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
-        body{
+
+        body {
             background-color: #333;
         }
-        .box{
+
+        .box {
             width: 100vw;
             height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-        .box canvas{
+
+        .box canvas {
             display: block;
             width: 100%;
             background-color: #fff;
         }
     </style>
 </head>
+
 <body>
     <div class="box">
 
@@ -30,4 +38,5 @@
     <script src="./LesiaGuiEngine.js"></script>
     <script src="./main.js"></script>
 </body>
+
 </html>
